@@ -4,8 +4,6 @@
 
 ---
 
-## Opening Hook
-
 I assumed customers with children would be Maven Marketing's most active online shoppers.
 
 They are not.
