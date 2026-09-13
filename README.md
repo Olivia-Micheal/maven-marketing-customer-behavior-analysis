@@ -3,8 +3,6 @@
 
 ---
 
-## Opening Hook
-
 I assumed customers with children would be Maven Marketing's most active online shoppers.
 
 They are not.
@@ -43,11 +41,10 @@ Maven Marketing provided a dataset of 2,237 customers covering demographics, cam
 
 The final output is a 5-page interactive Power BI dashboard built on a normalized star schema data model with custom DAX measures and dynamic page navigation.
 
-**Figure 1: Executive Overview Dashboard**
 
+<img width="1520" height="685" alt="Digital overview" src="https://github.com/user-attachments/assets/61498092-de35-4e64-8db3-79b0c63ee514" />
 
-![Executive Overview](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 1: Executive Overview Dashboard*
 
 
 ---
@@ -89,11 +86,10 @@ Data Cleaning, Outlier Detection, Median Imputation, Data Normalization, Star Sc
 
 The dataset covered customer demographics including age, income, education, marital status, household composition and country. It also contained six marketing campaign response columns, six product spending columns, four channel purchase columns and web visit behaviour data.
 
-**Figure 2: Raw Dataset (Flat Table before Transformation)**
 
+<img width="1917" height="762" alt="maven raw data" src="https://github.com/user-attachments/assets/55fbc9a8-900f-4b74-b219-015141045f75" />
 
-![Raw Dataset](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 2: Raw Dataset (Flat Table before Transformation)*
 
 
 This is how the data originally came in. One flat table with campaign responses, product spending and channel purchases all stored as separate columns with no structure for cross-dimensional analysis.
@@ -131,11 +127,10 @@ The original flat table contained campaign responses, product spending and chann
 - Income Category = Low (below $30,000), Medium ($30,000 to $70,000), High (above $70,000)
 - Kid Category = With Kids (Kidhome + Teenhome greater than 0), No Kids
 
-**Figure 3: Power Query Editor showing Applied Steps**
 
+<img width="1896" height="1001" alt="power query maven" src="https://github.com/user-attachments/assets/400247ca-2dfe-494e-9d9f-7559fb36cb63" />
 
-![Power Query](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 3: Power Query Editor showing Applied Steps*
 
 
 ---
@@ -157,11 +152,10 @@ All three fact tables connect to the central customer table via One to Many rela
 
 Total Revenue, Total Purchases, Total Campaign Acceptances, Campaign Response Rate %, Average Age, Average Income, % Customers with Kids, % Married Customers, Average Web Purchases per Customer, % Online Buyers, Average Income of Web Buyers, Avg Spend per Customer by Product, Customers with Web Purchases.
 
-**Figure 4: Power BI Model View showing Star Schema**
 
+<img width="1877" height="993" alt="Power bi model view" src="https://github.com/user-attachments/assets/cb17e01f-3878-419e-a0bc-efa342e133bc" />
 
-![Data Model](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 4: Power BI Model View showing Star Schema*
 
 
 ---
@@ -174,55 +168,49 @@ The dashboard tells a single connected story across 5 pages with dynamic navigat
 
 High level snapshot of all key metrics in one view. Total Revenue of $1M, Total Purchases of 33K, Campaign Response Rate of 45%, Average Customer Age of 45, Average Income of $52K and Total Customers of 2,237. Supported by Revenue by Product and Channel Performance overview charts.
 
-**Figure 5: Executive Overview Page**
 
+<img width="1520" height="685" alt="Digital overview" src="https://github.com/user-attachments/assets/e32c9432-d75d-4f04-a397-d77ecaf94176" />
 
-![Executive Overview](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 5: Executive Overview Page*
 
 
 **Page 2: Customer Profile and Demographics**
 
 Answers Q1. Breaks down the 2,237 customer base by education level, income category, age group, marital status, kids category and country of origin. Includes an interactive globe map showing customer geographic distribution and a ranked country bar chart.
 
-**Figure 6: Customer Profile Page**
 
+<img width="1521" height="682" alt="Digital Customer" src="https://github.com/user-attachments/assets/74d9ce61-7802-4f88-b820-7226b072960d" />
 
-![Customer Profile](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 6: Customer Profile Page*
 
 
 **Page 3: Campaign Response and Engagement**
 
 Answers Q2. Shows campaign acceptance comparison across all six campaigns, response rates broken down by education level and marital status, a donut chart showing campaign engagement by kids category and a scatter plot examining the relationship between income and campaign response rate.
 
-**Figure 7: Campaign Performance Page**
 
+<img width="1512" height="677" alt="Digital Campaign " src="https://github.com/user-attachments/assets/1f578a27-852f-493c-b7d4-8daf9d863bbd" />
 
-![Campaign Performance](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 7: Campaign Performance Page*
 
 
 **Page 4: Commercial Performance**
 
 Answers Q3 and Q4. Bar charts comparing all six product categories by total revenue and all four channels by total purchase volume. Donut chart showing channel share as a percentage of total purchases.
 
-**Figure 8: Sales Performance Page**
 
+<img width="1512" height="685" alt="Digital sales performance" src="https://github.com/user-attachments/assets/aaac9c2a-1a01-4f41-83ad-ec2119c5d8cd" />
 
-![Sales Performance](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 8: Sales Performance Page*
 
 
 **Page 5: Web Purchase Behaviour**
 
 Answers Q5. Analyzes average web purchases broken down by income category, education level, age group and kids category. Includes a scatter plot of individual customer income versus average web purchases.
 
-**Figure 9: Web Behaviour Page**
+<img width="1526" height="682" alt="Driver Digital 5" src="https://github.com/user-attachments/assets/a991bb08-b309-4599-affe-d286bfdeaa1d" />
 
-
-![Web Behaviour](INSERT_SCREENSHOT_PATH_HERE)
-
+*Figure 9: Web Behaviour Page*
 
 
 ---
