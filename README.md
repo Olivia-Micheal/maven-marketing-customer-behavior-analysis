@@ -1,8 +1,9 @@
-
-# Maven Marketing: Customer Behaviour & Revenue Analysis
-### A Power BI investigation into what actually drives customer engagement, product revenue, and online purchasing behaviour across 2,237 customers
+# Maven Marketing: Customer Behaviour and Revenue Analysis
+### A Power BI analysis of 2,237 customers covering demographics, campaign engagement, product performance, channel effectiveness and web purchasing behaviour
 
 ---
+
+## Opening Hook
 
 I assumed customers with children would be Maven Marketing's most active online shoppers.
 
@@ -26,7 +27,7 @@ That single finding changed how I approached everything else in this analysis. N
 6. [Data Model](#data-model)
 7. [Dashboard Pages](#dashboard-pages)
 8. [Key Insights and Findings](#key-insights-and-findings)
-9. [Surprising Findings](#surprising-findings)
+9. [What the Data Got Interesting](#what-the-data-got-interesting)
 10. [Summary and Conclusion](#summary-and-conclusion)
 11. [Recommendations](#recommendations)
 12. [Live Dashboard](#live-dashboard)
@@ -36,19 +37,24 @@ That single finding changed how I approached everything else in this analysis. N
 
 ## Project Overview
 
-This project was completed as part of the **Digitaley Drive Data Analytics Bootcamp** using Microsoft Power BI.
+This project was completed as part of the Digitaley Drive Data Analytics Bootcamp using Microsoft Power BI.
 
 Maven Marketing provided a dataset of 2,237 customers covering demographics, campaign responses, product spending, channel activity and web purchasing behaviour. The goal was to analyze customer behaviour patterns and deliver actionable insights to support smarter marketing, product and channel decisions.
 
-The final output is a **5-page interactive Power BI dashboard** built on a normalized star schema data model with custom DAX measures and dynamic page navigation.
+The final output is a 5-page interactive Power BI dashboard built on a normalized star schema data model with custom DAX measures and dynamic page navigation.
 
-📸 *INSERT SCREENSHOT: Executive Overview Page*
+**Figure 1: Executive Overview Dashboard**
+
+
+![Executive Overview](INSERT_SCREENSHOT_PATH_HERE)
+
+
 
 ---
 
 ## Business Problem and Questions
 
-Maven Marketing needed to move beyond surface-level reporting and understand the real drivers behind customer engagement and revenue. Five business questions guided the entire analysis:
+Maven Marketing needed to move beyond surface-level reporting and understand the real drivers behind customer engagement and revenue. Five business questions guided the entire analysis.
 
 1. What does the average Maven Marketing customer look like?
 2. Which marketing campaign was the most successful?
@@ -70,7 +76,7 @@ Every dashboard page, every visual and every DAX measure was built to answer one
 | Data Modeling | Star schema design and table relationships |
 
 **Skills demonstrated:**
-Data Cleaning · Outlier Detection · Median Imputation · Data Normalization · Star Schema Modeling · DAX Measure Writing · Customer Segmentation · Marketing Analytics · Dashboard Design · Data Storytelling
+Data Cleaning, Outlier Detection, Median Imputation, Data Normalization, Star Schema Modeling, DAX Measure Writing, Customer Segmentation, Marketing Analytics, Dashboard Design, Data Storytelling
 
 ---
 
@@ -81,7 +87,16 @@ Data Cleaning · Outlier Detection · Median Imputation · Data Normalization ·
 - **Fields:** 28 columns
 - **Format:** Single flat CSV file
 
-The dataset covered customer demographics (age, income, education, marital status, household composition, country), six marketing campaign response columns, six product spending columns, four channel purchase columns and web visit behaviour.
+The dataset covered customer demographics including age, income, education, marital status, household composition and country. It also contained six marketing campaign response columns, six product spending columns, four channel purchase columns and web visit behaviour data.
+
+**Figure 2: Raw Dataset (Flat Table before Transformation)**
+
+
+![Raw Dataset](INSERT_SCREENSHOT_PATH_HERE)
+
+
+
+This is how the data originally came in. One flat table with campaign responses, product spending and channel purchases all stored as separate columns with no structure for cross-dimensional analysis.
 
 ---
 
@@ -94,50 +109,60 @@ The dataset arrived as one flat table with several quality issues that needed to
 | Issue | Detail | Resolution |
 |---|---|---|
 | Missing Income values | 24 null entries across 2,237 rows | Replaced with median income of $51,000 |
-| Income outlier | One customer recorded with income of $666,666 — more than 4x the next highest value of $162,397 | Row removed |
-| Age outlier | One customer born in 1893 — producing an impossible age of 131 years | Row removed |
-| Invalid Marital Status | Entries labelled "Absurd" and "YOLO" present in marital status column | Replaced with "Other" |
+| Income outlier | One customer recorded with income of $666,666, more than 4x the next highest value of $162,397 | Row removed |
+| Age outlier | One customer born in 1893, producing an impossible age of 131 years | Row removed |
+| Invalid Marital Status | Entries labelled Absurd and YOLO present in the marital status column | Replaced with Other |
 | Incorrect data types | Multiple columns loaded with wrong data types | Corrected across all affected columns in Power Query |
 
-**After cleaning:** 2,237 rows reduced to **2,235 clean rows** ready for modeling.
+After cleaning, 2,237 rows were reduced to **2,235 clean rows** ready for modeling.
 
 **Transformation approach:**
 
-The original flat table contained campaign responses, product spending and channel purchases all stored in separate columns making cross-dimensional analysis impossible. Each group was unpivoted into a dedicated fact table:
+The original flat table contained campaign responses, product spending and channel purchases all stored in separate columns making cross-dimensional analysis impossible. Each group was unpivoted into a dedicated fact table.
 
-- Six campaign columns unpivoted into **DimCampaign_Table** (Campaign Name, Acceptance: 0 or 1)
-- Six product columns unpivoted into **DimProduct_Table** (Product Name, Revenue)
-- Four channel columns unpivoted into **DimChannel_Table** (Channel Name, Purchases)
+- Six campaign columns unpivoted into DimCampaign_Table (Campaign Name, Acceptance: 0 or 1)
+- Six product columns unpivoted into DimProduct_Table (Product Name, Revenue)
+- Four channel columns unpivoted into DimChannel_Table (Channel Name, Purchases)
 
 **Calculated columns added:**
 
-- **Age** = 2014 minus Year of Birth (based on most recent customer join date in dataset)
-- **Age Group** = Young Adults (18-30), Adults (31-45), Mid-Age (31-45), Seniors (46-60), Elderly (60+)
-- **Income Category** = Low (below $30,000), Medium ($30,000 to $70,000), High (above $70,000)
-- **Kid Category** = With Kids (Kidhome + Teenhome greater than 0), No Kids
+- Age = 2014 minus Year of Birth based on the most recent customer join date in the dataset
+- Age Group = Young Adults (18 to 30), Adults (31 to 45), Seniors (46 to 60), Elderly (60+)
+- Income Category = Low (below $30,000), Medium ($30,000 to $70,000), High (above $70,000)
+- Kid Category = With Kids (Kidhome + Teenhome greater than 0), No Kids
 
-📸 *INSERT SCREENSHOT: Power Query Editor showing Applied Steps*
+**Figure 3: Power Query Editor showing Applied Steps**
+
+
+![Power Query](INSERT_SCREENSHOT_PATH_HERE)
+
+
 
 ---
 
 ## Data Model
 
-The flat table was restructured into a **star schema** with four tables:
+The flat table was restructured into a star schema with four tables.
 
 | Table | Type | Purpose |
 |---|---|---|
 | Fact marketing_data | Dimension | Customer demographics, profile and calculated columns |
-| DimCampaign_Table | Fact | Campaign name and acceptance (0 or 1) per customer per campaign |
+| DimCampaign_Table | Fact | Campaign name and acceptance per customer per campaign |
 | DimProduct_Table | Fact | Product name and revenue per customer per product |
 | DimChannel_Table | Fact | Channel name and purchase count per customer per channel |
 
-All three fact tables connect to the central customer table via **One to Many** relationships using customer ID as the key. This structure allows customer demographic filters to interact with campaign, product and channel data across the entire dashboard.
+All three fact tables connect to the central customer table via One to Many relationships using customer ID as the key. This structure allows customer demographic filters to interact with campaign, product and channel data across the entire dashboard.
 
 **Key DAX measures created:**
 
-Total Revenue · Total Purchases · Total Campaign Acceptances · Campaign Response Rate % · Average Age · Average Income · % Customers with Kids · % Married Customers · Average Web Purchases per Customer · % Online Buyers · Average Income of Web Buyers · Avg Spend per Customer by Product · Customers with Web Purchases · and more.
+Total Revenue, Total Purchases, Total Campaign Acceptances, Campaign Response Rate %, Average Age, Average Income, % Customers with Kids, % Married Customers, Average Web Purchases per Customer, % Online Buyers, Average Income of Web Buyers, Avg Spend per Customer by Product, Customers with Web Purchases.
 
-📸 *INSERT SCREENSHOT: Power BI Model View*
+**Figure 4: Power BI Model View showing Star Schema**
+
+
+![Data Model](INSERT_SCREENSHOT_PATH_HERE)
+
+
 
 ---
 
@@ -145,68 +170,81 @@ Total Revenue · Total Purchases · Total Campaign Acceptances · Campaign Respo
 
 The dashboard tells a single connected story across 5 pages with dynamic navigation buttons, dropdown slicers and a consistent dark teal theme throughout.
 
----
+**Page 1: Executive Overview**
 
-### Page 1: Executive Overview
+High level snapshot of all key metrics in one view. Total Revenue of $1M, Total Purchases of 33K, Campaign Response Rate of 45%, Average Customer Age of 45, Average Income of $52K and Total Customers of 2,237. Supported by Revenue by Product and Channel Performance overview charts.
 
-High level snapshot of all key metrics in one view. Total Revenue of $1M, Total Purchases of 33K, Campaign Response Rate of 45%, Average Customer Age of 45, Average Income of $52K and Total Customers of 2,237. Supported by Revenue by Product and Channel Performance overview charts giving Ruby an immediate picture of commercial performance before diving into detail pages.
+**Figure 5: Executive Overview Page**
 
-📸 *INSERT SCREENSHOT: Executive Overview*
 
----
+![Executive Overview](INSERT_SCREENSHOT_PATH_HERE)
 
-### Page 2: Customer Profile and Demographics
 
-Answers **Q1.** Breaks down the 2,237 customer base by education level, income category, age group, marital status, kids category and country of origin. Includes an interactive globe map showing customer geographic distribution and a ranked country bar chart showing Spain leading with 1,094 customers.
 
-📸 *INSERT SCREENSHOT: Customer Profile Page*
+**Page 2: Customer Profile and Demographics**
 
----
+Answers Q1. Breaks down the 2,237 customer base by education level, income category, age group, marital status, kids category and country of origin. Includes an interactive globe map showing customer geographic distribution and a ranked country bar chart.
 
-### Page 3: Campaign Response and Engagement
+**Figure 6: Customer Profile Page**
 
-Answers **Q2.** Shows campaign acceptance comparison across all six campaigns, response rates broken down by education level and marital status, a donut chart showing campaign engagement by kids category and a scatter plot examining the relationship between income and campaign response rate.
 
-📸 *INSERT SCREENSHOT: Campaign Performance Page*
+![Customer Profile](INSERT_SCREENSHOT_PATH_HERE)
 
----
 
-### Page 4: Commercial Performance
 
-Answers **Q3 and Q4.** Bar charts comparing all six product categories by total revenue and all four channels by total purchase volume. Donut chart showing channel share as a percentage of total purchases. Average spend per customer by product category for deeper revenue analysis.
+**Page 3: Campaign Response and Engagement**
 
-📸 *INSERT SCREENSHOT: Sales Performance Page*
+Answers Q2. Shows campaign acceptance comparison across all six campaigns, response rates broken down by education level and marital status, a donut chart showing campaign engagement by kids category and a scatter plot examining the relationship between income and campaign response rate.
 
----
+**Figure 7: Campaign Performance Page**
 
-### Page 5: Web Purchase Behaviour
 
-Answers **Q5.** Analyzes average web purchases broken down by income category, education level, age group and kids category. Includes a scatter plot of individual customer income versus average web purchases revealing the income and purchasing relationship across the full customer base.
+![Campaign Performance](INSERT_SCREENSHOT_PATH_HERE)
 
-📸 *INSERT SCREENSHOT: Web Behaviour Page*
+
+
+**Page 4: Commercial Performance**
+
+Answers Q3 and Q4. Bar charts comparing all six product categories by total revenue and all four channels by total purchase volume. Donut chart showing channel share as a percentage of total purchases.
+
+**Figure 8: Sales Performance Page**
+
+
+![Sales Performance](INSERT_SCREENSHOT_PATH_HERE)
+
+
+
+**Page 5: Web Purchase Behaviour**
+
+Answers Q5. Analyzes average web purchases broken down by income category, education level, age group and kids category. Includes a scatter plot of individual customer income versus average web purchases.
+
+**Figure 9: Web Behaviour Page**
+
+
+![Web Behaviour](INSERT_SCREENSHOT_PATH_HERE)
+
+
 
 ---
 
 ## Key Insights and Findings
 
-### 👥 Customer Profile
+**Customer Profile**
 
-The average Maven Marketing customer is a **45-year-old married graduate earning approximately $52,000 annually.**
+The average Maven Marketing customer is a 45-year-old married graduate earning approximately $52,000 annually.
 
-- **72%** of customers have children at home (1,610 out of 2,237 customers)
-- **39%** of customers are married (864 customers)
-- **1,126 customers** hold a graduation-level degree — the largest education group by far
-- **1,165 customers** fall in the medium income bracket ($30,000 to $70,000)
-- **Spain leads** with 1,094 customers — nearly half the entire customer base
+- 72% of customers have children at home (1,610 out of 2,237 customers)
+- 39% of customers are married (864 customers)
+- 1,126 customers hold a graduation-level degree, the largest education group
+- 1,165 customers fall in the medium income bracket ($30,000 to $70,000)
+- Spain leads with 1,094 customers, nearly half the entire customer base
 - Saudi Arabia follows with 335 customers, then Canada with 268
 
 This is a predominantly middle-aged, educated, mid-income, family-oriented customer base concentrated in Spain.
 
----
+**Campaign Performance**
 
-### 📣 Campaign Performance
-
-The final campaign (Response) was the strongest performer with **334 acceptances.**
+The final campaign (Response) was the strongest performer with 334 acceptances.
 
 | Campaign | Acceptances |
 |---|---|
@@ -217,11 +255,11 @@ The final campaign (Response) was the strongest performer with **334 acceptances
 | Campaign 1 | 144 |
 | Campaign 2 | 30 |
 
-Overall campaign response rate: **45%**
+Overall campaign response rate: 45%
 
-Campaign 2 recorded only **30 acceptances** from 2,237 customers — a response rate of just **1.3%.** The final campaign outperformed it by **11 times** with exactly the same customer base.
+Campaign 2 recorded only 30 acceptances from 2,237 customers, a response rate of just 1.3%. The final campaign outperformed it by 11 times with exactly the same customer base.
 
-Education had a dramatic effect on campaign response:
+Education had a clear effect on campaign response:
 
 | Education Level | Campaign Response Rate |
 |---|---|
@@ -231,11 +269,9 @@ Education had a dramatic effect on campaign response:
 | 2n Cycle | 36% |
 | Basic | 15% |
 
-Customers with higher education levels are significantly more responsive to marketing campaigns. A **39 percentage point gap** separates the most and least responsive education groups.
+A 39 percentage point gap separates the most and least responsive education groups.
 
----
-
-### 🍷 Product Performance
+**Product Performance**
 
 | Product | Total Revenue |
 |---|---|
@@ -246,11 +282,9 @@ Customers with higher education levels are significantly more responsive to mark
 | Sweets | $61,000 |
 | Fruits | $59,000 |
 
-Wine generates approximately **50% of total product revenue alone.** The top two products combined (Wine and Meat) account for nearly **80% of all revenue.**
+Wine generates approximately 50% of total product revenue alone. Wine and Meat combined account for nearly 80% of all revenue.
 
----
-
-### 🛒 Channel Performance
+**Channel Performance**
 
 | Channel | Total Purchases |
 |---|---|
@@ -259,13 +293,11 @@ Wine generates approximately **50% of total product revenue alone.** The top two
 | Catalog | 6,000 |
 | Deals | 5,200 |
 
-The physical store is the dominant channel with **13,000 purchases** — 39% of all purchases. Deals is the weakest at **5,200 purchases** — just 16% of total purchases. Customers are largely ignoring discount-based promotions despite them representing a channel investment for the business.
+The physical store is the dominant channel at 39% of all purchases. Deals is the weakest at 16% of total purchases. Customers are largely ignoring discount-based promotions.
 
----
+**Web Purchase Behaviour**
 
-### 💻 Web Purchase Behaviour
-
-**98% of customers** have made at least one web purchase. Total web purchases across the customer base: **9,100 transactions.**
+98% of customers have made at least one web purchase. Total web purchases across the customer base: 9,100 transactions.
 
 Average web purchases by income category:
 
@@ -279,10 +311,10 @@ Average web purchases by age group:
 
 | Age Group | Average Web Purchases |
 |---|---|
-| Seniors (46-60) | 4.6 |
-| Mid-Age (31-45) | 4.5 |
+| Seniors (46 to 60) | 4.6 |
+| Mid-Age (31 to 45) | 4.5 |
 | Adults | 3.9 |
-| Young Adults (18-30) | 3.3 |
+| Young Adults (18 to 30) | 3.3 |
 
 Average web purchases by education:
 
@@ -294,43 +326,37 @@ Average web purchases by education:
 | 2n Cycle | 3.8 |
 | Basic | 1.9 |
 
-The pattern is consistent across all three dimensions. Higher income, older age and higher education all associate with more web purchases. The strongest online buyers are **medium income, senior, PhD-level customers.**
+The pattern is consistent across all three dimensions. Higher income, older age and higher education all connect with more web purchases. The strongest online buyers are medium income, senior, PhD-level customers.
 
 ---
 
-## Surprising Findings
+## What the Data Got Interesting
 
-### The Kids Paradox: Engagement Does Not Equal Conversion
+**The Kids Paradox: Engagement Does Not Equal Conversion**
 
-72% of Maven Marketing customers have children at home. They showed **63.49% campaign engagement** in the kids category donut analysis. They are the majority. They look like the primary target audience.
+72% of Maven Marketing customers have children at home. They showed 63.49% campaign engagement. They are the majority. They look like the primary target audience.
 
-But customers **without** children averaged **4.4 web purchases** compared to **4.0** for customers with children.
+But customers without children averaged 4.4 web purchases compared to 4.0 for customers with children.
 
-The group that engages more with campaigns buys online less frequently. This is the central tension in the data and the most important finding for Maven Marketing's marketing strategy.
+The group that engages more with campaigns buys online less frequently. This is the most important finding for Maven Marketing's marketing strategy.
 
-**Engagement and conversion are not the same thing.**
+Engagement and conversion are not the same thing.
 
----
+**Seniors Outbuy Young Adults Online**
 
-### Seniors Outbuy Young Adults Online
+Senior customers aged 46 to 60 record the highest average web purchases at 4.6 per customer. Young adults aged 18 to 30 average just 3.3 web purchases. That is a 1.3 purchase gap per customer in favour of the older segment.
 
-Senior customers aged 46-60 record the highest average web purchases at **4.6** per customer. Young adults aged 18-30 average just **3.3** web purchases. That is a **1.3 purchase gap per customer** in favour of the older segment.
+The assumption that younger customers dominate online shopping is contradicted by this data. Maven Marketing's most established, higher income older customers are quietly driving online revenue.
 
-The assumption that younger customers dominate online shopping is contradicted by this data. Maven Marketing's most established, higher income older customers are quietly driving online revenue while the business may be targeting younger demographics.
+**Campaign 2 Was Nearly Invisible**
 
----
+30 acceptances. 2,237 customers. 1.3% response rate.
 
-### Campaign 2 Was Nearly Invisible
+The final campaign achieved 334 acceptances with exactly the same customer base. The gap between the best and worst campaign is 11 times. Whatever drove Campaign 2's messaging, targeting or offer failed significantly and deserves investigation before the next campaign cycle.
 
-**30 acceptances. 2,237 customers. 1.3% response rate.**
+**Wine Is a Single Point of Failure**
 
-The final campaign achieved **334 acceptances** with exactly the same customer base. The gap between the best and worst campaign is not marginal. It is **11 times.** Whatever drove Campaign 2's messaging, targeting or offer failed significantly and deserves investigation before the next campaign cycle.
-
----
-
-### Wine Is a Single Point of Failure
-
-Wine generating $680,000 and 50% of total revenue is impressive. It is also a concentration risk that the business cannot afford to ignore. A supply disruption, price increase or shift in customer wine preference in a single product category could cut total revenue in half overnight.
+Wine generating $680,000 and 50% of total revenue is impressive. It is also a concentration risk. A supply disruption, price increase or shift in customer wine preference could cut total revenue in half.
 
 ---
 
@@ -338,30 +364,30 @@ Wine generating $680,000 and 50% of total revenue is impressive. It is also a co
 
 This analysis set out to understand who Maven Marketing's customers are, what they respond to, what they buy and where they buy it. The data answered every question and challenged several assumptions along the way.
 
-The customer base is clear. **2,237 customers, average age 45, average income $52,000, 72% with children, predominantly married graduates from Spain.** Medium income customers form the largest segment at 1,165 customers. Married customers account for 864 of the base. Spain alone contributes 1,094 customers — nearly half the total.
+The customer base is clear. 2,237 customers, average age 45, average income $52,000, 72% with children, predominantly married graduates from Spain. Medium income customers form the largest segment at 1,165 customers. Married customers account for 864. Spain contributes 1,094 customers, nearly half the total.
 
-Campaign performance is uneven. The final campaign generated **334 acceptances at a 45% overall response rate** while Campaign 2 managed just 30 acceptances from the same audience. Education is the strongest predictor of campaign response. PhD holders respond at 54%. Basic education customers respond at 15%. The 39 percentage point gap between them tells the business exactly where to concentrate campaign spend.
+Campaign performance is uneven. The final campaign generated 334 acceptances at a 45% overall response rate while Campaign 2 managed just 30 acceptances from the same audience. Education is the strongest predictor of campaign response. PhD holders respond at 54%. Basic education customers respond at 15%. The 39 percentage point gap between them tells the business exactly where to focus campaign spend.
 
-Product revenue is heavily concentrated. **Wine at $680,000 and Meat at $373,000 account for nearly 80% of total revenue combined.** The remaining four products (Gold at $98,000, Fish at $84,000, Sweets at $61,000 and Fruits at $59,000) collectively contribute just 22% of revenue. This concentration creates both efficiency and vulnerability.
+Product revenue is heavily concentrated. Wine at $680,000 and Meat at $373,000 account for nearly 80% of total revenue combined. The remaining four products (Gold at $98,000, Fish at $84,000, Sweets at $61,000 and Fruits at $59,000) collectively contribute just 22% of revenue.
 
-Channel performance follows a similar pattern. **The store leads with 13,000 purchases (39% of total), Web follows with 9,100 purchases (27%), Catalog records 6,000 (18%) and Deals trails at 5,200 purchases (16%).** Discount-based promotions are the weakest channel despite representing an ongoing business investment.
+Channel performance follows a similar pattern. The store leads with 13,000 purchases (39% of total). Web follows with 9,100 purchases (27%). Catalog records 6,000 (18%) and Deals trails at 5,200 purchases (16%). Discount-based promotions are the weakest channel despite representing an ongoing business investment.
 
-Web purchasing behaviour is driven by income, education and age rather than lifestyle factors. **Medium income customers average 5.4 web purchases. Seniors average 4.6. PhD holders average 4.4.** The customers who engage most with campaigns (parents at 63.49% engagement) are not the customers who buy online most frequently. Customers without children average 4.4 web purchases versus 4.0 for customers with children. The data consistently shows that the characteristics most associated with online conversion are income level, education level and age rather than family status or campaign engagement.
+Web purchasing behaviour is driven by income, education and age rather than lifestyle factors. Medium income customers average 5.4 web purchases. Seniors average 4.6. PhD holders average 4.4. The customers who engage most with campaigns (parents at 63.49% engagement) are not the customers who buy online most. Customers without children average 4.4 web purchases versus 4.0 for customers with children.
 
-This connects directly back to the opening finding. The assumption that busy parents would be the biggest online shoppers was wrong. The data showed that the customers most likely to convert online are medium to high income, educated, slightly older customers without children at home. That is who Maven Marketing should be building its digital experience for.
+This connects directly back to the opening finding. The assumption that busy parents would be the biggest online shoppers was wrong. The customers most likely to convert online are medium to high income, educated, slightly older customers without children at home. That is who Maven Marketing should be building its digital experience for.
 
 ---
 
 ## Recommendations
 
-**1. Protect Wine revenue but urgently diversify.**
-Wine generating 50% of revenue from a single product category is a concentration risk. Invest in growing Meat and Gold product lines to reduce dependency. A 10% shift in wine purchasing behaviour could significantly impact total revenue.
+**1. Protect Wine revenue but start diversifying now.**
+Wine generating 50% of revenue from one product category is a risk. Investing in growing Meat and Gold product lines will reduce dependency on a single category.
 
-**2. Redirect Deals channel budget to Web experience.**
-The Deals channel records just 5,200 purchases (16% of total) despite being an active channel. Meanwhile 98% of customers have made at least one web purchase and the Web channel records 9,100 purchases. Discount promotions are not driving behaviour. Digital experience investment will deliver stronger returns.
+**2. Redirect Deals channel budget to the Web experience.**
+The Deals channel records just 5,200 purchases (16% of total). Meanwhile 98% of customers have made at least one web purchase and the Web channel records 9,100 purchases. Discount promotions are not driving behaviour. Digital experience investment will deliver stronger returns.
 
-**3. Concentrate campaign spend on educated, higher income segments.**
-PhD holders respond at 54% versus 15% for Basic education customers. Campaign budgets that treat all customers equally are inefficient. Targeted campaigns toward graduation-level and above customers will deliver significantly stronger response rates based on the data.
+**3. Concentrate campaign spend on educated and higher income segments.**
+PhD holders respond at 54% versus 15% for Basic education customers. Campaign budgets that treat all customers equally are inefficient. Targeting graduation-level and above customers will deliver stronger response rates based on the data.
 
 **4. Separate campaign engagement metrics from conversion metrics.**
 Customers with children engage with campaigns at 63.49% but average fewer web purchases than customers without children. Reporting engagement as a proxy for conversion is misleading. Future campaign analysis should track both engagement and actual purchase conversion separately.
@@ -370,13 +396,13 @@ Customers with children engage with campaigns at 63.49% but average fewer web pu
 30 acceptances from 2,237 customers represents a near-total failure of messaging, targeting or offer design. Understanding what differentiated Campaign 2 from the final campaign (334 acceptances, 11x better performance) is essential before committing budget to the next campaign round.
 
 **6. Build the digital experience for medium income seniors and educated customers.**
-The strongest online buyers are medium income (5.4 avg purchases), senior aged 46-60 (4.6 avg purchases) and PhD-educated (4.4 avg purchases). UX, product recommendations and digital marketing should be optimized for this segment rather than defaulting to assumptions about younger digital natives.
+The strongest online buyers are medium income (5.4 avg purchases), seniors aged 46 to 60 (4.6 avg purchases) and PhD-educated customers (4.4 avg purchases). UX, product recommendations and digital marketing should be optimized for this segment.
 
 ---
 
 ## Live Dashboard
 
-[INSERT POWER BI PUBLISH TO WEB LINK]
+[Explore the Interactive Dashboard here](https://app.powerbi.com/links/XuaBYmn5kj?ctid=f6f117ef-72a8-4267-9390-7c30e90fd172&pbi_source=linkShare)
 
 ---
 
@@ -385,8 +411,8 @@ The strongest online buyers are medium income (5.4 avg purchases), senior aged 4
 **Anetoh Olivia Chinecherem**
 Data Analyst | Geology Graduate | Digitaley Drive Data Analytics Bootcamp
 
-[LinkedIn](INSERT LINK) · [GitHub](INSERT LINK) · [Email](INSERT EMAIL)
+[LinkedIn](https://www.linkedin.com/in/olivia-anetoh-955b94328) | [GitHub](https://github.com/Olivia-Micheal) | [Email](mailto:anetohchinecherem@gmail.com)
 
 ---
 
-*This project was completed as part of the Digitaley Drive Data Analytics Bootcamp. All analysis and visualizations were built independently using Microsoft Power BI.*
+*This project was independently completed as part of the Digitaley Drive Data Analytics Bootcamp. All analysis, data modeling, DAX measures and dashboard design were done using Microsoft Power BI.*
